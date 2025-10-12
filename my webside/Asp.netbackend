@@ -1,0 +1,54 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Ling;
+using System.Threading.Tasks;
+
+namespace PortfolioAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PortfolioController : ControllerBase
+    {
+        private readonly PortfolioContext _context;
+
+        public PortfolioController(PortfolioContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet("profile")]
+        public async Task<ActionResult<Profile>> GetProfile()
+        {
+            return await _context.Profile.FirstOrDefaultAsync();
+        }
+
+        [HttpGet("projects")]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        {
+            return await _context.Projects.ToListAsync();
+        }
+    }
+
+    public class PortfolioContext : DbContext
+    {
+        public PortfolioContext(DbContextOptions<PortfolioContext> options) : base(options) { }
+        public DbSet<Profile> Profile { get; set; }
+        public DbSet<Project> Projects { get; set; }
+    }
+
+    public class Profile
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Location { get; set; }
+    }
+
+    public class Project
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+}

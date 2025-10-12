@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s ease-in-out;
+        }
+        .file-item:hover {
+            background: #e8f0ff;
+        }
+        .file-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .file-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Download My Files</h1>
+        <ul class="file-list" id="fileList"></ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("/files")  // Endpoint to get file list (server-side needed)
+                .then(response => response.json())
+                .then(files => {
+                    let fileList = document.getElementById("fileList");
+                    files.forEach(file => {
+                        let li = document.createElement("li");
+                        li.className = "file-item";
+                        li.innerHTML = `
+                            <img class="file-icon" src="https://cdn-icons-png.flaticon.com/512/4726/4726012.png" alt="File">
+                            <a href="/download/${file}" download>${file}</a>
+                        `;
+                        fileList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error("Error fetching files:", error));
+        });
+    </script>
+</body>
+</html>
